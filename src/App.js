@@ -6,17 +6,11 @@ import axios from 'axios';
 
 const { ethers } = require("ethers");
 
-const PK = "2cda07fd36def97a9edf2b3fbd831a414c5f68a31654a34782fccf782a1d8e4c"
-
-// const NODE_URL = "https://rpc-mumbai.matic.today";
-// const PROVIDER = new ethers.providers.JsonRpcProvider(NODE_URL);
-
 const NODE_URL = 'wss://ws-mumbai.matic.today';
 const PROVIDER = new ethers.providers.WebSocketProvider(NODE_URL);
-
 const CONTRACT_ADDRESS = "0x5f42c1540390da3b2d07baf07fd4c8bde758f676"
 const ABI = contract.abi;
-const META_DATA_URL = "http://localhost:8081/metaNFTs/"
+const META_DATA_URL = "http://34.64.202.172:8081/metaNFTs"
 
 function App() {
 
@@ -76,7 +70,7 @@ function App() {
 
         setMintedNFT(meta.image);
       } else {
-        console.log("Ethereum object doesn't exist!")
+        console.log("이더리움 계열 블록체인이 확인되지 않습니다.")
       }
     } catch (error) {
       console.log(error);
@@ -88,10 +82,6 @@ function App() {
       const { ethereum } = window;
 
       if (ethereum) {
-        // const wallet = new ethers.Wallet(PK, PROVIDER);
-        // const signer = wallet.provider.getSigner(wallet.address);
-        // const contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
-
         const provider = new ethers.providers.Web3Provider(ethereum);
         const signer = provider.getSigner();
         const nftContract = new ethers.Contract(
