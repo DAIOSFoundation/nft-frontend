@@ -2,18 +2,25 @@ import logo from './logo.svg';
 import './App.css';
 import contract from './contracts/ExampleNFT.json';
 import {useEffect, useState} from "react";
+import axios from 'axios';
 
 const { ethers } = require("ethers");
 
-const PK = ""
-const NODE_URL = "https://rpc-mumbai.matic.today";
-const PROVIDER = new ethers.providers.JsonRpcProvider(NODE_URL);
-const CONTRACT_ADDRESS = "0x8cb4aDe99039868144d9F610c2781e80d7a55ccd"
+const PK = "2cda07fd36def97a9edf2b3fbd831a414c5f68a31654a34782fccf782a1d8e4c"
+
+// const NODE_URL = "https://rpc-mumbai.matic.today";
+// const PROVIDER = new ethers.providers.JsonRpcProvider(NODE_URL);
+
+const NODE_URL = 'wss://ws-mumbai.matic.today';
+const PROVIDER = new ethers.providers.WebSocketProvider(NODE_URL);
+
+const CONTRACT_ADDRESS = "0x5f42c1540390da3b2d07baf07fd4c8bde758f676"
 const ABI = contract.abi;
 const META_DATA_URL = "http://localhost:8081/metaNFTs/"
 
 function App() {
 
+  const [mintedNFT, setMintedNFT] = useState(null);
   const [currentAccount, setCurrentAccount] = useState(null);
 
   const checkWalletIsConnected = async () => {
@@ -49,21 +56,65 @@ function App() {
     }
   }
 
+  // Gets the minted NFT data
+  const getMintedNFT = async (tokenId) => {
+    try {
+      const { ethereum } = window
+
+      if (ethereum) {
+        const provider = new ethers.providers.Web3Provider(ethereum)
+        const signer = provider.getSigner()
+        const nftContract = new ethers.Contract(
+            CONTRACT_ADDRESS,
+            ABI,
+            signer
+        )
+
+        let tokenUri = await nftContract.tokenURI(tokenId)
+        let data = await axios.get(tokenUri)
+        let meta = data.data;
+
+        setMintedNFT(meta.image);
+      } else {
+        console.log("Ethereum object doesn't exist!")
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   const mintNftHandler = async () => {
     try {
       const { ethereum } = window;
 
       if (ethereum) {
-        const wallet = new ethers.Wallet(PK, PROVIDER);
-        const signer = wallet.provider.getSigner(wallet.address);
-        const contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
+        // const wallet = new ethers.Wallet(PK, PROVIDER);
+        // const signer = wallet.provider.getSigner(wallet.address);
+        // const contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
 
-        let nftTxn = await contract.mintNFT(CONTRACT_ADDRESS, META_DATA_URL);
+        const provider = new ethers.providers.Web3Provider(ethereum);
+        const signer = provider.getSigner();
+        const nftContract = new ethers.Contract(
+            CONTRACT_ADDRESS,
+            ABI,
+            signer
+        )
+
+        let nftTxn = await nftContract.mintNFT('0xA9e018881796Bf2bb2721346807a0e3fb82D99f8', META_DATA_URL);
+        console.log('Mining....', nftTxn.hash);
 
         console.log("민팅중이니 기다리세요...");
-        await nftTxn.wait();
+        const tx = await nftTxn.wait();
 
         console.log(`성공!, 트랜젝션을 확인하세요 : https://mumbai.polygonscan.com//tx/${nftTxn.hash}`);
+
+        let event = tx.events[0];
+        let value = event.args[2];
+        let tokenId = value.toNumber();
+
+        console.log(`Mined, ${nftTxn.hash}`);
+
+        getMintedNFT(tokenId);
 
       } else {
         console.log("트랜젝션이 확인되지 않습니다.");
@@ -99,6 +150,13 @@ function App() {
         <h1>Scrappy Squirrels Tutorial</h1>
         <div>
           {currentAccount ? mintNftButton() : connectWalletButton()}
+        </div>
+        <div className={(mintedNFT) ? 'display' : 'hidden'}>
+          <img
+              src={mintedNFT}
+              alt=''
+              className='h-60 w-60 rounded-lg shadow-2xl shadow-[#6FFFE9] hover:scale-105 transition duration-500 ease-in-out'
+          />
         </div>
       </div>
   )
