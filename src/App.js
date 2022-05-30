@@ -5,8 +5,8 @@ import {useEffect, useState} from "react";
 
 const { ethers } = require("ethers");
 
-const PK = ""
-const NODE_URL = "https://rpc-mumbai.matic.today";
+const PK = "2cda07fd36def97a9edf2b3fbd831a414c5f68a31654a34782fccf782a1d8e4c"
+const NODE_URL = "/";
 const PROVIDER = new ethers.providers.JsonRpcProvider(NODE_URL);
 const CONTRACT_ADDRESS = "0x8cb4aDe99039868144d9F610c2781e80d7a55ccd"
 const ABI = contract.abi;
