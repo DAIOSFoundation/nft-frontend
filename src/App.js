@@ -44,13 +44,13 @@ function App() {
 
     try {
       const accounts = await ethereum.request({method: 'eth_requestAccounts'});
-      console.log("계좌주소 : ", accounts[0])
+      console.log("계좌주소 : [" + accounts[0] + "]")
     } catch (err) {
       console.log(err)
     }
   }
 
-  // Gets the minted NFT data
+  // 민팅된 토큰의 정보를 가져옴
   const getMintedNFT = async (tokenId) => {
     try {
       const { ethereum } = window
@@ -64,11 +64,16 @@ function App() {
             signer
         )
 
-        let tokenUri = await nftContract.tokenURI(tokenId)
-        let data = await axios.get(tokenUri)
-        let meta = data.data;
+        let metaDataURL = await nftContract.tokenURI(tokenId)
+        console.log("metaDataURL : [" + metaDataURL + "]");
 
-        setMintedNFT(meta.image);
+        let metaData = await axios.get(metaDataURL)
+        let meta = metaData.data;
+        console.log("metaData : [" + metaData.data + "]");
+        console.log("imageURL : [" + meta.imageURL + "]");
+
+        setMintedNFT(meta.imageURL);
+
       } else {
         console.log("이더리움 계열 블록체인이 확인되지 않습니다.")
       }
@@ -101,8 +106,6 @@ function App() {
         let event = tx.events[0];
         let value = event.args[2];
         let tokenId = value.toNumber();
-
-        console.log(`Mined, ${nftTxn.hash}`);
 
         getMintedNFT(tokenId);
 
@@ -137,7 +140,7 @@ function App() {
 
   return (
       <div className='main-app'>
-        <h1>Scrappy Squirrels Tutorial</h1>
+        <h1>Polygon 한국 개발자 커뮤니티 워크숍 NFT 예제</h1>
         <div>
           {currentAccount ? mintNftButton() : connectWalletButton()}
         </div>
