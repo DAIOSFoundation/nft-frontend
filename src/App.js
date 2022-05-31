@@ -65,22 +65,9 @@ function App() {
             signer
         )
 
-        let metaDataURL = await nftContract.tokenURI(tokenId)
-        console.log("metaDataURL : [" + metaDataURL + "]");
-
-        axios.defaults.withCredentials = true;
-
-        let metaData = await axios.get(metaDataURL,{
-          withCredentials: true // 쿠키 cors 통신 설정
-        }).then(response => {
-          console.log(response);
-        });
-
-        let meta = metaData.data;
-        console.log("metaData : [" + metaData.data + "]");
-        console.log("imageURL : [" + meta.imageURL + "]");
-
-        setMintedNFT(meta.imageURL);
+        console.log("tokenID : [" + tokenId + "]");
+        let imageURL = "https://testnets.opensea.io/assets/mumbai/0x5f42c1540390da3b2d07baf07fd4c8bde758f676/"+tokenId
+        setMintedNFT(imageURL);
 
       } else {
         console.log("이더리움 계열 블록체인이 확인되지 않습니다.")
@@ -112,10 +99,9 @@ function App() {
         console.log(`성공!, 트랜젝션을 확인하세요 : https://mumbai.polygonscan.com//tx/${nftTxn.hash}`);
 
         let event = tx.events[0];
-        let value = event.args[2];
-        let tokenId = value.toNumber();
 
-        getMintedNFT(tokenId);
+        console.log("event : ["+JSON.stringify(event)+"]")
+        getMintedNFT(event.args[2].toString(10));
 
       } else {
         console.log("트랜젝션이 확인되지 않습니다.");
@@ -153,11 +139,7 @@ function App() {
           {currentAccount ? mintNftButton() : connectWalletButton()}
         </div>
         <div className={(mintedNFT) ? 'display' : 'hidden'}>
-          <img
-              src={mintedNFT}
-              alt=''
-              className='h-60 w-60 rounded-lg shadow-2xl shadow-[#6FFFE9] hover:scale-105 transition duration-500 ease-in-out'
-          />
+          <a href={mintedNFT}><h1>{mintedNFT}</h1></a>
         </div>
       </div>
   )
