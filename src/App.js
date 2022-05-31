@@ -44,7 +44,8 @@ function App() {
 
     try {
       const accounts = await ethereum.request({method: 'eth_requestAccounts'});
-      console.log("계좌주소 : [" + accounts[0] + "]")
+      console.log("계좌주소 : [" + accounts[0] + "]");
+      setCurrentAccount(accounts[0]);
     } catch (err) {
       console.log(err)
     }
@@ -67,7 +68,14 @@ function App() {
         let metaDataURL = await nftContract.tokenURI(tokenId)
         console.log("metaDataURL : [" + metaDataURL + "]");
 
-        let metaData = await axios.get(metaDataURL)
+        axios.defaults.withCredentials = true;
+
+        let metaData = await axios.get(metaDataURL,{
+          withCredentials: true // 쿠키 cors 통신 설정
+        }).then(response => {
+          console.log(response);
+        });
+
         let meta = metaData.data;
         console.log("metaData : [" + metaData.data + "]");
         console.log("imageURL : [" + meta.imageURL + "]");
