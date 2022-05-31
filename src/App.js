@@ -1,7 +1,9 @@
 import logo from './logo.svg';
+import twitterLogo from './assets/twitter-logo.svg';
+import nxdfLogo from './assets/NXDF-logo.png'
 import './App.css';
 import contract from './contracts/ExampleNFT.json';
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import axios from 'axios';
 
 const { ethers } = require("ethers");
@@ -10,7 +12,11 @@ const NODE_URL = 'wss://ws-mumbai.matic.today';
 const PROVIDER = new ethers.providers.WebSocketProvider(NODE_URL);
 const CONTRACT_ADDRESS = "0x5f42c1540390da3b2d07baf07fd4c8bde758f676"
 const ABI = contract.abi;
-const META_DATA_URL = "http://34.64.202.172:8081/metaNFTs"
+const META_DATA_URL = "http://34.64.202.172:8081/metaNFTs";
+const IMG_URL = "http://34.64.202.172:8081/00.png";
+
+const TWITTER_HANDLE = 'nxdf16';
+const TWITTER_LINK = `https://twitter.com/${TWITTER_HANDLE}`;
 
 function App() {
 
@@ -66,8 +72,8 @@ function App() {
         )
 
         console.log("tokenID : [" + tokenId + "]");
-        let imageURL = "https://testnets.opensea.io/assets/mumbai/0x5f42c1540390da3b2d07baf07fd4c8bde758f676/"+tokenId
-        setMintedNFT(imageURL);
+        let openSeaURL = "https://testnets.opensea.io/assets/mumbai/0x5f42c1540390da3b2d07baf07fd4c8bde758f676/"+tokenId
+        setMintedNFT(openSeaURL);
 
       } else {
         console.log("이더리움 계열 블록체인이 확인되지 않습니다.")
@@ -134,12 +140,29 @@ function App() {
 
   return (
       <div className='main-app'>
-        <h1>Polygon 한국 개발자 커뮤니티 워크숍 NFT 예제</h1>
+        <a href="https://nxdf.io"><img src={nxdfLogo} width="500" /></a>
+          <h1>Polygon 한국 개발자 커뮤니티 워크숍 NFT 예제</h1>
+        <br/>
+        <div>
+          <img src={IMG_URL} width="700" />
+        </div>
+        <br/>
+        <br/>
         <div>
           {currentAccount ? mintNftButton() : connectWalletButton()}
         </div>
+        <br/>
         <div className={(mintedNFT) ? 'display' : 'hidden'}>
           <a href={mintedNFT}><h1>{mintedNFT}</h1></a>
+        </div>
+        <div className="footer-container">
+          <img alt="Twitter Logo" className="twitter-logo" src={twitterLogo} />
+          <a
+              className="footer-text"
+              href={TWITTER_LINK}
+              target="_blank"
+              rel="noreferrer"
+          >{`built on @${TWITTER_HANDLE}`}</a>
         </div>
       </div>
   )
