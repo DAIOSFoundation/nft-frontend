@@ -1,14 +1,14 @@
-import logo from './logo.svg';
-import twitterLogo from './assets/twitter-logo.svg';
-import nxdfLogo from './assets/NXDF-logo.png'
-import './App.css';
-import contract from './contracts/ExampleNFT.json';
+import logo from "./logo.svg";
+import twitterLogo from "./assets/twitter-logo.svg";
+import nxdfLogo from "./assets/NXDF-logo.png";
+import "./App.css";
+import contract from "./contracts/ExampleNFT.json";
 import React, {useEffect, useState} from "react";
-import axios from 'axios';
+import axios from "axios";
 
 const { ethers } = require("ethers");
 
-const NODE_URL = 'wss://ws-mumbai.matic.today';
+const NODE_URL = "wss://ws-mumbai.matic.today";
 const PROVIDER = new ethers.providers.WebSocketProvider(NODE_URL);
 const CONTRACT_ADDRESS = "0x5f42c1540390da3b2d07baf07fd4c8bde758f676"
 const ABI = contract.abi;
