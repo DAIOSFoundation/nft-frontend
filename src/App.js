@@ -12,8 +12,7 @@ const CONTRACT_ADDRESS = "0x5f42c1540390da3b2d07baf07fd4c8bde758f676"
 const ABI = contract.abi;
 const META_DATA_URL = "http://34.64.202.172:8081/metaNFTs";
 const IMG_URL = "http://34.64.202.172:8081/00.png";
-const TWITTER_HANDLE = "nxdf16";
-const TWITTER_LINK = "https://twitter.com/${TWITTER_HANDLE}";
+const TWITTER_LINK = "https://twitter.com/nxdf16";
 
 function App() {
 
@@ -54,33 +53,7 @@ function App() {
     }
   }
 
-  // 민팅된 토큰의 정보를 가져옴
-  const getMintedNFT = async (tokenId) => {
-    try {
-      const { ethereum } = window
-
-      if (ethereum) {
-        const provider = new ethers.providers.Web3Provider(ethereum)
-        const signer = provider.getSigner()
-        const nftContract = new ethers.Contract(
-            CONTRACT_ADDRESS,
-            ABI,
-            signer
-        )
-
-        console.log("tokenID : [" + tokenId + "]");
-        let openSeaURL = "https://testnets.opensea.io/assets/mumbai/0x5f42c1540390da3b2d07baf07fd4c8bde758f676/"+tokenId
-        setMintedNFT(openSeaURL);
-
-      } else {
-        console.log("이더리움 계열 블록체인이 확인되지 않습니다.")
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  const mintNftHandler = async () => {
+   const mintNftHandler = async () => {
     try {
       const { ethereum } = window;
 
@@ -112,6 +85,32 @@ function App() {
 
     } catch (err) {
       console.log(err);
+    }
+  }
+
+  // 민팅된 토큰의 정보를 가져옴
+  const getMintedNFT = async (tokenId) => {
+    try {
+      const { ethereum } = window
+
+      if (ethereum) {
+        const provider = new ethers.providers.Web3Provider(ethereum)
+        const signer = provider.getSigner()
+        const nftContract = new ethers.Contract(
+            CONTRACT_ADDRESS,
+            ABI,
+            signer
+        )
+
+        console.log("tokenID : [" + tokenId + "]");
+        let openSeaURL = "https://testnets.opensea.io/assets/mumbai/0x5f42c1540390da3b2d07baf07fd4c8bde758f676/"+tokenId
+        setMintedNFT(openSeaURL);
+
+      } else {
+        console.log("이더리움 계열 블록체인이 확인되지 않습니다.")
+      }
+    } catch (error) {
+      console.log(error);
     }
   }
 
@@ -159,7 +158,7 @@ function App() {
               href={TWITTER_LINK}
               target="_blank"
               rel="noreferrer"
-          >{`built on @${TWITTER_HANDLE}`}</a>
+          >built on @NXDF16</a>
         </div>
       </div>
   )
