@@ -1,4 +1,3 @@
-import logo from "./logo.svg";
 import twitterLogo from "./assets/twitter-logo.svg";
 import nxdfLogo from "./assets/NXDF-logo.png";
 import "./App.css";
@@ -7,16 +6,14 @@ import React, {useEffect, useState} from "react";
 import axios from "axios";
 
 const { ethers } = require("ethers");
-
 const NODE_URL = "wss://ws-mumbai.matic.today";
 const PROVIDER = new ethers.providers.WebSocketProvider(NODE_URL);
 const CONTRACT_ADDRESS = "0x5f42c1540390da3b2d07baf07fd4c8bde758f676"
 const ABI = contract.abi;
 const META_DATA_URL = "http://34.64.202.172:8081/metaNFTs";
 const IMG_URL = "http://34.64.202.172:8081/00.png";
-
-const TWITTER_HANDLE = 'nxdf16';
-const TWITTER_LINK = `https://twitter.com/${TWITTER_HANDLE}`;
+const TWITTER_HANDLE = "nxdf16";
+const TWITTER_LINK = "https://twitter.com/${TWITTER_HANDLE}";
 
 function App() {
 
